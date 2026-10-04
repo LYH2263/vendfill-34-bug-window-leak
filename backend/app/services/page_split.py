@@ -33,8 +33,10 @@ def present_summary(location_id: int, payload: dict) -> dict:
         "order_id": payload.get("id"),
         "status": payload.get("status"),
         "total_fill": gap_sum,
-        "need_fill_count": len(lines),
-        "full_count": zero_fill,
+        # 成功单已带引擎计数时透传单据原值（旧票是什么就展示什么，展示层不得重标）；
+        # 仅在调用方只给货道行、未带计数时，才回退到本地统计。
+        "need_fill_count": payload.get("need_fill_count", len(lines)),
+        "full_count": payload.get("full_count", zero_fill),
         "overbooked_count": payload.get("overbooked_count", 0),
         "blocked_count": payload.get("blocked_count", 0),
         "capped_count": payload.get("capped_count", 0),
