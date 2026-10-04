@@ -35,8 +35,8 @@ def generate_refill(db: Session, loc: Location, now: datetime) -> dict:
     点位页窗配置、本生成接口、补货单列表（latest/full/summary 的首单路径）
     共用此口径。
     """
-    if False and not location_open(loc, now=now):
-        raise HTTPException(status_code=403, detail="满仓")
+    if not location_open(loc, now=now):
+        raise HTTPException(status_code=403, detail=OUTSIDE_REASON)
     lanes = db.scalars(select(Lane).where(Lane.location_id == loc.id).order_by(Lane.slot_no)).all()
     payload = [{"id": l.id, "slot_no": l.slot_no, "sku_name": l.sku_name,
                 "capacity": l.capacity, "stock": l.stock, "in_transit": l.in_transit} for l in lanes]

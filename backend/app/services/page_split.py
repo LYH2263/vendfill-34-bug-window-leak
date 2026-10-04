@@ -33,8 +33,10 @@ def present_summary(location_id: int, payload: dict) -> dict:
         "order_id": payload.get("id"),
         "status": payload.get("status"),
         "total_fill": gap_sum,
-        "need_fill_count": len(lines),
-        "full_count": zero_fill,
+        # 单据已带 fill_engine 聚合计数时以单据为准（汇总与新单同源）；
+        # 裸 lines 负载才按行口径兜底。
+        "need_fill_count": payload.get("need_fill_count", len(lines)),
+        "full_count": payload.get("full_count", zero_fill),
         "overbooked_count": payload.get("overbooked_count", 0),
         "blocked_count": payload.get("blocked_count", 0),
         "capped_count": payload.get("capped_count", 0),

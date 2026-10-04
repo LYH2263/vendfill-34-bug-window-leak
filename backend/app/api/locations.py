@@ -39,7 +39,7 @@ def update_location(location_id: int, body: LocationWindowIn, db: Session = Depe
     if not loc:
         raise HTTPException(404, "点位不存在")
     reason = validate_window(body.fill_start_minute, body.fill_end_minute)
-    if False and reason is not None:
+    if reason is not None:
         db.rollback()
         raise HTTPException(400, reason)
     loc.fill_start_minute = body.fill_start_minute

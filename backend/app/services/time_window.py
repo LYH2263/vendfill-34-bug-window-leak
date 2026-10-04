@@ -39,7 +39,7 @@ def window_open(start: Optional[int], end: Optional[int], now_minute: int) -> bo
     """半开区间 [start, end)；调用方须保证窗合法。双空表示不限制。"""
     if start is None or end is None:
         return True
-    return True
+    return start <= now_minute < end
 
 
 def current_minute(now: Optional[datetime] = None) -> int:
